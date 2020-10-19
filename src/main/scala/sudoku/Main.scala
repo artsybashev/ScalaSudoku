@@ -24,11 +24,12 @@ object Main {
         0, 7, 0, 0,  8, 0,14, 0,  0, 0,15, 0,  0, 0, 0, 0,
         14, 0, 3, 0,  0, 7, 0, 0,  0, 0,13, 2,  0, 4, 0,16)
 
-    val mapper = new FieldMapper(4)
-    val field = mapper.create(input)
-    println(field.toString)
+    val ruleProvider = new StandardRuleProvider(4)
+    val viewProvider = new SudokuViewProvider(ruleProvider)
+    val field = ruleProvider.create(input)
+    println(viewProvider.mkString(field))
     println("-- Solution --")
     val result = SudokuSolver.solve(field)
-    println(result.get.sudokuField.toString)
+    println(viewProvider.mkString(result.get.sudokuField))
   }
 }

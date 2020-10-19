@@ -4,9 +4,9 @@ import org.scalatest.flatspec.AnyFlatSpec
 import org.scalatest.matchers.should.Matchers._
 
 class SudokuSolverTestSuite extends AnyFlatSpec {
-  lazy val mapper2 = new FieldMapper(2)
-  lazy val mapper3 = new FieldMapper(3)
-  lazy val mapper4 = new FieldMapper(4)
+  lazy val mapper2 = new StandardRuleProvider(2)
+  lazy val mapper3 = new StandardRuleProvider(3)
+  lazy val mapper4 = new StandardRuleProvider(4)
 
   "Simple 4x4 puzzle" should "be solved" in {
     val input: Array[Int] =

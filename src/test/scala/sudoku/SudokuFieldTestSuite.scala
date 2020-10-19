@@ -69,22 +69,22 @@ class SudokuFieldTestSuite extends AnyFlatSpec {
   )
 
   "horizontalIndexes" should "be exactly" in {
-    val horizontalIndexes = new FieldMapper(3).horizontalIndexes
+    val horizontalIndexes = new StandardRuleProvider(3).horizontalIndexes
     horizontalIndexes should equal(expectedHorizontalIndexes)
   }
 
   "verticalIndexes" should "be exactly" in {
-    val verticalIndexes = new FieldMapper(3).verticalIndexes
+    val verticalIndexes = new StandardRuleProvider(3).verticalIndexes
     verticalIndexes should equal(expectedVerticalIndexes)
   }
 
   "tileIndexes" should "be exactly" in {
-    val tileIndexes = new FieldMapper(3).tileIndexes
+    val tileIndexes = new StandardRuleProvider(3).tileIndexes
     tileIndexes should equal(expectedTileIndexes)
   }
 
   "indexMap cells" should "has correct horizontal" in {
-    val indexMap = new FieldMapper(3).indexMap
+    val indexMap = new StandardRuleProvider(3).houseMap
     val dependency0 = indexMap.get(0).get
     dependency0.horizontal should equal(expectedHorizontalIndexes(0))
 
@@ -96,7 +96,7 @@ class SudokuFieldTestSuite extends AnyFlatSpec {
   }
 
   "indexMap" should "has correct vertical" in {
-    val indexMap = new FieldMapper(3).indexMap
+    val indexMap = new StandardRuleProvider(3).houseMap
     val dependency0 = indexMap.get(0).get
     dependency0.vertical should equal(expectedVerticalIndexes(0))
 
@@ -108,7 +108,7 @@ class SudokuFieldTestSuite extends AnyFlatSpec {
   }
 
   "indexMap" should "has correct tiles" in {
-    val indexMap = new FieldMapper(3).indexMap
+    val indexMap = new StandardRuleProvider(3).houseMap
     val dependency0 = indexMap.get(0).get
     dependency0.tile should equal(expectedTileIndexes(0))
 
