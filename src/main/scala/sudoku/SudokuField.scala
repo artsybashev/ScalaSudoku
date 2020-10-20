@@ -1,6 +1,5 @@
 package sudoku
 
-import scala.collection.immutable.Iterable
 import scala.collection.mutable.{Set => MSet}
 import org.apache.commons.lang3.StringUtils
 
@@ -25,7 +24,7 @@ class SudokuField(val cells: Array[Int], val freeCells: Int, val ruleProvider: R
 
   def solved: Boolean = freeCells==0
 
-  def getCellOptions(cellIndex: Int): Set[Int] = {
+  def getCellOptions(cellIndex: Int): CellOption = {
     val dependency = getCellDependency(cellIndex)
 
     val used : MSet[Int] = MSet()
@@ -43,7 +42,7 @@ class SudokuField(val cells: Array[Int], val freeCells: Int, val ruleProvider: R
     acc
   }
 
-  def getAllCellOptions: Map[Int, Set[Int]] =
+  def getAllCellOptions: Map[Int, CellOption] =
     cells.zipWithIndex.filter(_._1==0)
       .map(p => p._2 -> getCellOptions(p._2))
       .toMap

@@ -1,14 +1,15 @@
 package sudoku
 
-import scala.collection.immutable.Iterable
+import scala.collection.immutable.{BitSet, Iterable}
 
 trait RuleProviderInterface {
   val rank: Int
   val sideLength: Int
   val size: Int
   val houseMap: Map[Int,CellHouseCollection]
-  val possibleValues: Set[Int]
+  val possibleValues: CellOption
   val maxValue: Int
+  val cellCoordinates: Map[Int, (Int, Int, Int)]
 
   def create(input: Iterable[Int]): SudokuField
 }
@@ -17,7 +18,7 @@ class StandardRuleProvider(val rank: Int) extends RuleProviderInterface {
   require(rank > 0)
 
   val sideLength: Int = rank*rank
-  val possibleValues: Set[Int] = (1 to sideLength).toSet
+  val possibleValues: CellOption = BitSet.fromSpecific(1 to sideLength)
   lazy val maxValue: Int = possibleValues.max
   val size: Int = sideLength*sideLength
 
@@ -26,6 +27,9 @@ class StandardRuleProvider(val rank: Int) extends RuleProviderInterface {
   lazy val tileIndexes: Array[Array[Int]] = (0 until sideLength).map(p => getTileIndexes(p)).toArray
   lazy val houseMap: Map[Int, CellHouseCollection] = (0 until size).map { i =>
     i -> getCellDependency(i)
+  }.toMap
+  lazy val cellCoordinates: Map[Int, (Int, Int, Int)] = (0 until size).map { i =>
+    i -> getCellCoordinates(i)
   }.toMap
 
   def create(input: Iterable[Int]): SudokuField = {
@@ -60,5 +64,12 @@ class StandardRuleProvider(val rank: Int) extends RuleProviderInterface {
     val vertical = verticalIndexes.find(v => v.contains(cellIndex)).get
     val tile = tileIndexes.find(v => v.contains(cellIndex)).get
     new CellHouseCollection(horizontal, vertical, tile)
+  }
+
+  private def getCellCoordinates(cellIndex: Int): (Int, Int, Int) = {
+    val horizontal = horizontalIndexes.zipWithIndex.find(h => h._1.contains(cellIndex)).get._2
+    val vertical = verticalIndexes.zipWithIndex.find(v => v._1.contains(cellIndex)).get._2
+    val tile = tileIndexes.zipWithIndex.find(v => v._1.contains(cellIndex)).get._2
+    (horizontal, vertical, tile)
   }
 }
