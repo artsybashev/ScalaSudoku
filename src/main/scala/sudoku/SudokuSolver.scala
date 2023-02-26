@@ -35,11 +35,11 @@ object SudokuSolver {
   }
 
   def tryReduceUnique(source: State): (Boolean, State) = {
-    val newState = source.removeUniques
+    val newState = source.removeUniques()
     (!(newState eq source), newState)
   }
   def tryReduceConjugated(source: State): (Boolean, State) = {
-    val newState = source.removeConjugatedInHouses
+    val newState = source.removeConjugatedInHouses()
     (!(newState eq source), newState)
   }
 

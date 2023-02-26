@@ -6,10 +6,10 @@ trait RuleProviderInterface {
   val rank: Int
   val sideLength: Int
   val size: Int
-  val houseMap: Map[Int,CellHouseCollection]
+  def houseMap: Map[Int,CellHouseCollection]
   val possibleValues: CellOption
-  val maxValue: Int
-  val cellCoordinates: Map[Int, (Int, Int, Int)]
+  def maxValue: Int
+  def cellCoordinates: Map[Int, (Int, Int, Int)]
 
   def create(input: Iterable[Int]): SudokuField
 }
@@ -19,13 +19,13 @@ class StandardRuleProvider(val rank: Int) extends RuleProviderInterface {
 
   val sideLength: Int = rank*rank
   val possibleValues: CellOption = BitSet.fromSpecific(1 to sideLength)
-  lazy val maxValue: Int = possibleValues.max
+  override lazy val maxValue: Int = possibleValues.max
   val size: Int = sideLength*sideLength
 
   lazy val horizontalIndexes: Array[Array[Int]] = getHorizontalIndexes
   lazy val verticalIndexes: Array[Array[Int]] = getVerticalIndexes
   lazy val tileIndexes: Array[Array[Int]] = (0 until sideLength).map(p => getTileIndexes(p)).toArray
-  lazy val houseMap: Map[Int, CellHouseCollection] = (0 until size).map { i =>
+  override lazy val houseMap: Map[Int, CellHouseCollection] = (0 until size).map { i =>
     i -> getCellDependency(i)
   }.toMap
   lazy val cellCoordinates: Map[Int, (Int, Int, Int)] = (0 until size).map { i =>
